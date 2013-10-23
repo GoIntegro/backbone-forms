@@ -1228,7 +1228,7 @@ Form.editors.Text = Form.Editor.extend({
 
   initialize: function(options) {
     Form.editors.Base.prototype.initialize.call(this, options);
-
+    
     var schema = this.schema;
 
     //Allow customising text type (email, phone etc.) for HTML5 browsers
@@ -1236,10 +1236,14 @@ Form.editors.Text = Form.Editor.extend({
 
     if (schema && schema.editorAttrs && schema.editorAttrs.type) type = schema.editorAttrs.type;
     if (schema && schema.dataType) type = schema.dataType;
-
-    this.$el.attr('type', type);
+    
+    // Attribute 'type' for textareas does not work on IE7
+    if (this.$el.get(0).nodeName.toLowerCase() == 'input') {
+        this.$el.attr('type', type);
+    }
+   
   },
-
+          
   /**
    * Adds the editor to the DOM
    */
